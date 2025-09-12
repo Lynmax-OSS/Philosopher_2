@@ -1,0 +1,61 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/02 13:20:33 by keteo             #+#    #+#             */
+/*   Updated: 2025/09/02 13:20:33 by keteo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo.h"
+
+static int	start_threads(t_rules *r)
+{
+	int	i;
+
+	r->start_time = now_ms();
+	i = 0;
+	while (i < r->num_philos)
+	{
+		r->philos[i].last_meal = r->start_time;
+		if (pthread_create(&r->philos[i].thread, NULL, philo_routine
+				, &r->philos[i]))
+			return (1);
+		i++;
+	}
+	if (pthread_create(&r->monitor_thread, NULL, monitor_routine, r))
+		return (1);
+	return (0);
+}
+
+static void	join_threads(t_rules *r)
+{
+	int	i;
+
+	i = 0;
+	while (i < r->num_philos)
+	{
+		pthread_join(r->philos[i].thread, NULL);
+		i++;
+	}
+	pthread_join(r->monitor_thread, NULL);
+}
+
+int	main(int ac, char **av)
+{
+	t_rules	r;
+
+	if (parse_and_init(ac, av, &r))
+		return (1);
+	if (start_threads(&r))
+	{
+		destroy_and_free(&r);
+		return (1);
+	}
+	join_threads(&r);
+	destroy_and_free(&r);
+	return (0);
+}
