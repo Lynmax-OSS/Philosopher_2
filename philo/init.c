@@ -73,17 +73,17 @@ static int	check_arg(char **av, t_rules *r)
 		printf("num_philos is negative\n");
 		return (1);
 	}
-	if (str_to_int(av[2], &r->time_to_die) || r->time_to_die < 0)
+	else if (str_to_int(av[2], &r->time_to_die) || r->time_to_die < 0)
 	{
 		printf("time_to_die is negative\n");
 		return (1);
 	}
-	if (str_to_int(av[3], &r->time_to_eat) || r->time_to_eat < 0)
+	else if (str_to_int(av[3], &r->time_to_eat) || r->time_to_eat < 0)
 	{
 		printf("time_to_eat is negative\n");
 		return (1);
 	}
-	if (str_to_int(av[4], &r->time_to_sleep) || r->time_to_sleep < 0)
+	else if (str_to_int(av[4], &r->time_to_sleep) || r->time_to_sleep < 0)
 	{
 		printf("time_to_sleep is negative\n");
 		return (1);
