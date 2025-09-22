@@ -16,7 +16,6 @@ static int	start_threads(t_rules *r)
 {
 	int	i;
 
-	r->start_time = now_ms();
 	i = 0;
 	while (i < r->num_philos)
 	{
@@ -29,6 +28,10 @@ static int	start_threads(t_rules *r)
 	if (pthread_create(&r->monitor_thread, NULL, monitor_routine, r))
 		return (1);
 	pthread_mutex_lock(&r->state_lock);
+	r->start_time = now_ms();
+	i = 0;
+	while (i < r->num_philos)
+		r->philos[i++].last_meal = r->start_time;
 	r->start_sim = 1;
 	pthread_mutex_unlock(&r->state_lock);
 	return (0);
