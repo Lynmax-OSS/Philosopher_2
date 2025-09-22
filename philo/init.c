@@ -108,6 +108,7 @@ int	parse_and_init(int ac, char **av, t_rules *r)
 	}
 	r->someone_died = 0;
 	r->all_satiated = 0;
+	r->start_sim = 0;
 	if (init_mutexes(r) || init_philos(r))
 		return (1);
 	return (0);

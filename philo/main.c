@@ -28,6 +28,9 @@ static int	start_threads(t_rules *r)
 	}
 	if (pthread_create(&r->monitor_thread, NULL, monitor_routine, r))
 		return (1);
+	pthread_mutex_lock(&r->state_lock);
+	r->start_sim = 1;
+	pthread_mutex_unlock(&r->state_lock);
 	return (0);
 }
 
@@ -42,6 +45,21 @@ static void	join_threads(t_rules *r)
 		i++;
 	}
 	pthread_join(r->monitor_thread, NULL);
+}
+
+void	waiting(t_philo *p)
+{
+	while (1)
+	{
+		pthread_mutex_lock(&p->rules->state_lock);
+		if (p->rules->start_sim)
+		{
+			pthread_mutex_unlock(&p->rules->state_lock);
+			break ;
+		}
+		pthread_mutex_unlock(&p->rules->state_lock);
+		usleep(1);
+	}
 }
 
 int	main(int ac, char **av)

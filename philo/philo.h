@@ -42,6 +42,7 @@ typedef struct s_rules
 	long long		start_time;
 	int				someone_died;
 	int				all_satiated;
+	int				start_sim;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	state_lock;
@@ -59,5 +60,6 @@ void		ms_sleep(t_rules *r, int ms);
 int			safe_print(t_rules *r, int id, const char *msg);
 int			str_to_int(const char *s, int *out);
 void		destroy_and_free(t_rules *r);
+void		waiting(t_philo *p);
 
 #endif
