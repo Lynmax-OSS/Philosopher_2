@@ -31,11 +31,45 @@ static int	start_threads(t_rules *r)
 	r->start_time = now_ms();
 	i = 0;
 	while (i < r->num_philos)
-		r->philos[i++].last_meal = r->start_time;
+		r->philos[i++].last_meal = r->start_time
 	r->start_sim = 1;
 	pthread_mutex_unlock(&r->state_lock);
 	return (0);
 }
+
+static int	start_threads(t_rules *r)
+{
+    int i;
+
+    /* Create philosopher threads */
+    i = 0;
+    while (i < r->num_philos)
+    {
+        r->philos[i].last_meal = 0; // not valid yet
+        if (pthread_create(&r->philos[i].thread, NULL,
+                philo_routine, &r->philos[i]))
+            return (1);
+        i++;
+    }
+
+    /* Create monitor thread */
+    if (pthread_create(&r->monitor_thread, NULL, monitor_routine, r))
+        return (1);
+
+    /* ---- Start simulation barrier ---- */
+    pthread_mutex_lock(&r->state_lock);
+    r->start_time = now_ms();
+    i = 0;
+    while (i < r->num_philos)
+        r->philos[i++].last_meal = r->start_time;  // init here, just once
+    r->start_sim = 1;   // release barrier
+    pthread_mutex_unlock(&r->state_lock);
+    /* ---------------------------------- */
+
+    return (0);
+}
+
+
 
 static void	join_threads(t_rules *r)
 {
