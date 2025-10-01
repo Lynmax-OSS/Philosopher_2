@@ -80,6 +80,8 @@ void	*philo_routine(void *arg)
 		safe_print(p->rules, p->id, "is sleeping");
 		ms_sleep(p->rules, p->rules->time_to_sleep);
 		safe_print(p->rules, p->id, "is thinking");
+		if (p->rules->num_philos % 2 != 0 && p->id % 2 == 1)
+			ms_sleep(p->rules, p->rules->time_to_eat / 2);
 	}
 	return (NULL);
 }
