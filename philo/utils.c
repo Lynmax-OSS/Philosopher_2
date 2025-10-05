@@ -47,8 +47,8 @@ int	safe_print(t_rules *r, int id, const char *msg)
 {
 	int	stop;
 
-	pthread_mutex_lock(&r->print_lock);
 	pthread_mutex_lock(&r->state_lock);
+	pthread_mutex_lock(&r->print_lock);
 	stop = r->someone_died && (msg[0] != 'd');
 	if (!stop && !r->all_satiated)
 		printf("%lld %d %s\n", elapsed_ms(r->start_time), id, msg);
