@@ -55,35 +55,20 @@ static void	join_threads(t_rules *r)
 	pthread_join(r->monitor_thread, NULL);
 }
 
-void	waiting(t_philo *p)
+void	waiting(t_rules *r)
 {
 	while (1)
 	{
-		pthread_mutex_lock(&p->rules->state_lock);
-		if (p->rules->start_sim)
+		pthread_mutex_lock(&r->state_lock);
+		if (r->start_sim)
 		{
-			pthread_mutex_unlock(&p->rules->state_lock);
+			pthread_mutex_unlock(&r->state_lock);
 			break ;
 		}
-		pthread_mutex_unlock(&p->rules->state_lock);
-		usleep(50);
+		pthread_mutex_unlock(&r->state_lock);
+		usleep(10);
 	}
 }
-
-// void	waiting(t_philo *p)
-// {
-// 	while (1)
-// 	{
-// 		pthread_mutex_lock(&p->rules->state_lock);
-// 		if (p->rules->start_sim)
-// 		{
-// 			pthread_mutex_unlock(&p->rules->state_lock);
-// 			break ;
-// 		}
-// 		pthread_mutex_unlock(&p->rules->state_lock);
-// 		usleep(50);
-// 	}
-// }
 
 int	main(int ac, char **av)
 {

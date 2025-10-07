@@ -63,7 +63,7 @@ void	*philo_routine(void *arg)
 	t_philo	*p;
 
 	p = (t_philo *)arg;
-	waiting(p);
+	waiting(p->rules);
 	if (p->rules->num_philos == 1)
 	{
 		safe_print(p->rules, p->id, "has taken a fork");

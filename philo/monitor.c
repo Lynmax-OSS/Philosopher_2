@@ -66,13 +66,14 @@ void	*monitor_routine(void *arg)
 	t_rules	*r;
 
 	r = (t_rules *)arg;
+	waiting(r);
 	while (1)
 	{
 		if (check_death(r))
 			break ;
 		if (check_full(r))
 			break ;
-		usleep(1);
+		usleep(100);
 	}
 	return (NULL);
 }

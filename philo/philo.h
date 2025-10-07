@@ -61,6 +61,6 @@ void		ms_sleep(t_rules *r, int ms);
 int			safe_print(t_rules *r, int id, const char *msg);
 int			str_to_int(const char *s, int *out);
 void		destroy_and_free(t_rules *r);
-void		waiting(t_philo *p);
+void		waiting(t_rules *r);
 
 #endif
