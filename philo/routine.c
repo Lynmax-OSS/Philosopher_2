@@ -48,14 +48,14 @@ static int	is_over(t_rules *r)
 
 static void	eat(t_philo *p)
 {
-	pthread_mutex_lock(&p->rules->state_lock);
-	p->last_meal = now_ms();
-	pthread_mutex_unlock(&p->rules->state_lock);
 	safe_print(p->rules, p->id, "is eating");
+	pthread_mutex_lock(&p->meal_lock);
+	p->last_meal = now_ms();
+	pthread_mutex_unlock(&p->meal_lock);
 	ms_sleep(p->rules, p->rules->time_to_eat);
-	pthread_mutex_lock(&p->rules->state_lock);
+	pthread_mutex_lock(&p->meal_lock);
 	p->meals_eaten++;
-	pthread_mutex_unlock(&p->rules->state_lock);
+	pthread_mutex_unlock(&p->meal_lock);
 }
 
 void	*philo_routine(void *arg)

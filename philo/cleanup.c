@@ -22,7 +22,11 @@ void	destroy_and_free(t_rules *r)
 	{
 		i = 0;
 		while (i < r->num_philos)
-			pthread_mutex_destroy(&r->forks[i++]);
+		{
+			pthread_mutex_destroy(&r->philos[i].meal_lock);
+			pthread_mutex_destroy(&r->forks[i]);
+			i++;
+		}
 		free(r->forks);
 	}
 	pthread_mutex_destroy(&r->print_lock);

@@ -47,6 +47,8 @@ static int	init_philos(t_rules *r)
 		r->philos[i].meals_eaten = 0;
 		r->philos[i].last_meal = 0;
 		r->philos[i].rules = r;
+		if (pthread_mutex_init(&r->philos[i].meal_lock, NULL))
+			return (1);
 		i++;
 	}
 	link_philos_and_forks(r);

@@ -15,16 +15,18 @@
 static int	check_death(t_rules *r)
 {
 	int			i;
-	long long	t;
-	long long	last;
+	long long	now;
+	long long	elapsed_time;
 
 	i = 0;
 	while (i < r->num_philos)
 	{
+		pthread_mutex_lock(&r->philos[i].meal_lock);
+		now = now_ms();
+		elapsed_time = now - r->philos[i].last_meal;
+		pthread_mutex_unlock(&r->philos[i].meal_lock);
 		pthread_mutex_lock(&r->state_lock);
-		last = r->philos[i].last_meal;
-		t = now_ms();
-		if (!r->someone_died && (t - last) >= r->time_to_die)
+		if (!r->someone_died && elapsed_time >= r->time_to_die)
 		{
 			r->someone_died = 1;
 			pthread_mutex_unlock(&r->state_lock);

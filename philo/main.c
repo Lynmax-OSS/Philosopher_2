@@ -30,9 +30,15 @@ static int	start_threads(t_rules *r)
 	r->start_time = now_ms();
 	i = 0;
 	while (i < r->num_philos)
-		r->philos[i++].last_meal = r->start_time;
+	{
+		pthread_mutex_lock(&r->philos[i].meal_lock);
+		r->philos[i].last_meal = r->start_time;
+		pthread_mutex_unlock(&r->philos[i].meal_lock);
+		i++;
+	}
 	r->start_sim = 1;
 	pthread_mutex_unlock(&r->state_lock);
+	usleep(100);
 	return (0);
 }
 
@@ -60,9 +66,24 @@ void	waiting(t_philo *p)
 			break ;
 		}
 		pthread_mutex_unlock(&p->rules->state_lock);
-		usleep(1);
+		usleep(50);
 	}
 }
+
+// void	waiting(t_philo *p)
+// {
+// 	while (1)
+// 	{
+// 		pthread_mutex_lock(&p->rules->state_lock);
+// 		if (p->rules->start_sim)
+// 		{
+// 			pthread_mutex_unlock(&p->rules->state_lock);
+// 			break ;
+// 		}
+// 		pthread_mutex_unlock(&p->rules->state_lock);
+// 		usleep(50);
+// 	}
+// }
 
 int	main(int ac, char **av)
 {
